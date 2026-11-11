@@ -60,7 +60,14 @@ export APPLE_KEYCHAIN_PROFILE="$PROFILE"
 # --- 4. Build, sign, notarize the app ----------------------------------------------
 echo
 echo "Building … (notarization usually takes 2–15 minutes)"
-rm -rf dist
+# Remove old builds. Retry, because an open Finder window can write .DS_Store files
+# into the folder while it is being deleted.
+for TRY in 1 2 3; do
+  rm -rf dist 2>/dev/null && break
+  sleep 1
+done
+[ ! -d dist ] || fail 'Could not delete the dist folder. Close Finder windows showing it and
+eject a mounted .dmg of the kiosk, then try again.'
 npx electron-builder --mac --universal --publish never
 
 # --- 5. Sign, notarize and staple the disk image too -----------------------------------
