@@ -1,15 +1,25 @@
-// Kiosk settings — edit this file, then restart the app (or rebuild it).
+// Default settings for the first start. After that, the settings made in the launcher window
+// are used (saved in the app's user data folder, see README).
 
 module.exports = {
   // The website the kiosk opens. Can also be a local file, e.g. 'file:///Users/me/show/index.html'.
-  // Override without editing this file: npm start -- --url=https://example.com
+  // Override from the command line: npm start -- --url=https://example.com
   url: 'https://www.zhdk.ch',
 
-  // Key combination that quits the kiosk. All other shortcuts are blocked.
-  // Uses Electron accelerator syntax: https://www.electronjs.org/docs/latest/api/accelerator
+  // Key combination that leaves the kiosk and returns to the launcher. All other shortcuts are
+  // blocked. Uses Electron accelerator syntax: https://www.electronjs.org/docs/latest/api/accelerator
   // 'CommandOrControl' is Cmd on macOS and Ctrl on Windows/Linux.
-  // Set to null to make the app impossible to quit from the keyboard.
+  // Set to null to make the kiosk impossible to leave from the keyboard.
   exitShortcut: 'CommandOrControl+Shift+Alt+Q',
+
+  // When the page cannot be loaded (e.g. no network yet), try again after this many seconds.
+  retryAfterSeconds: 10,
+
+  // --- Defaults for the options in the launcher ---------------------------
+
+  // Start the kiosk right away when the app opens, without showing the launcher.
+  // Same as starting with --kiosk.
+  autoLaunch: false,
 
   // Hide the mouse pointer (e.g. for touch screens or non-interactive displays).
   hideCursor: false,
@@ -21,21 +31,14 @@ module.exports = {
   // Only allow navigation within the domain of `url`. Links to other sites are ignored.
   restrictToOrigin: false,
 
-  // When the page cannot be loaded (e.g. no network yet), try again after this many seconds.
-  retryAfterSeconds: 10,
-
   // Page zoom, 1 = 100 %.
   zoomFactor: 1,
 
   // Automatically allow camera, microphone, location, notifications etc. without asking.
   grantPermissions: true,
 
-  // Delete cookies, local storage and cache every time the app starts (e.g. public terminals).
+  // Delete cookies, local storage and cache every time the kiosk starts (e.g. public terminals).
   clearDataOnStart: false,
-
-  // Load the unpacked Chrome extensions in the extensions/ folder (one subfolder per extension).
-  // Folders starting with _ are skipped, e.g. rename extensions/hide-scrollbars to _hide-scrollbars to switch it off.
-  loadExtensions: true,
 
   // Start the built app automatically when the user logs in (macOS and Windows, built app only).
   autostart: false,

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'" />
+    <title>Chrome Kiosk</title>
+    <link rel="stylesheet" href="launcher.css" />
+  </head>
+
+  <body>
+    <main>
+      <header>
+        <h1>Chrome Kiosk</h1>
+        <span class="version" id="version"></span>
+      </header>
+
+      <!-- Website + launch -->
+      <section class="card">
+        <form id="launch-form" autocomplete="off">
+          <label for="url" class="label">Website</label>
+          <div class="url-row">
+            <input id="url" type="text" spellcheck="false" placeholder="https://example.com" />
+            <button id="launch" type="submit" class="primary">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" /></svg>
+              Launch
+            </button>
+          </div>
+          <p class="hint" id="url-hint"></p>
+          <p class="notice" id="dev-notice" hidden>
+            <strong>Dev mode</strong> (<code>npm run dev</code>): the kiosk opens in a normal window with
+            developer tools and shortcuts work. Use <code>npm start</code> for the real fullscreen kiosk.
+          </p>
+          <p class="error" id="url-error" hidden></p>
+        </form>
+      </section>
+
+      <!-- Extensions -->
+      <section class="card" id="extensions-card">
+        <div class="card-head">
+          <h2>Extensions</h2>
+          <button id="add-extension" type="button">Add folder…</button>
+        </div>
+
+        <ul id="extension-list" class="extension-list"></ul>
+
+        <div id="dropzone" class="dropzone">
+          <strong>Drop unpacked extension folders here</strong>
+          <span>A folder with a <code>manifest.json</code> — or a Chrome extension folder (<code>&lt;ID&gt;</code> or <code>&lt;version&gt;</code>)</span>
+        </div>
+
+        <p class="error" id="extension-error" hidden></p>
+        <p class="hint">Changes apply the next time you launch.</p>
+      </section>
+
+      <!-- Options -->
+      <details class="card options">
+        <summary><h2>Options</h2></summary>
+
+        <label class="check">
+          <input type="checkbox" data-setting="autoLaunch" />
+          <span>Start the kiosk right away when the app opens<small>Skip this window — for unattended installations</small></span>
+        </label>
+        <label class="check">
+          <input type="checkbox" data-setting="autostart" />
+          <span>Open the app when the user logs in<small>Built app on macOS and Windows only</small></span>
+        </label>
+        <label class="check">
+          <input type="checkbox" data-setting="hideCursor" />
+          <span>Hide the mouse pointer</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" data-setting="restrictToOrigin" />
+          <span>Stay on this website<small>Links to other domains are ignored</small></span>
+        </label>
+        <label class="check">
+          <input type="checkbox" data-setting="grantPermissions" />
+          <span>Allow camera, microphone, location … without asking</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" data-setting="clearDataOnStart" />
+          <span>Delete cookies, logins and cache on every launch</span>
+        </label>
+
+        <div class="numbers">
+          <label class="number">
+            <span>Back to start page after</span>
+            <input type="number" min="0" step="10" data-setting="resetAfterIdleSeconds" />
+            <span>seconds idle <small>(0 = never)</small></span>
+          </label>
+          <label class="number">
+            <span>Zoom</span>
+            <input type="number" min="25" max="500" step="5" data-setting="zoomFactor" data-percent />
+            <span>%</span>
+          </label>
+        </div>
+      </details>
+    </main>
+
+    <template id="extension-row">
+      <li class="extension">
+        <label class="switch" title="Enable / disable">
+          <input type="checkbox" />
+          <span></span>
+        </label>
+        <div class="info">
+          <div class="title"><span class="name"></span> <span class="meta"></span></div>
+          <div class="description"></div>
+          <div class="error"></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="ghost show" title="Show in folder">Show</button>
+          <button type="button" class="ghost remove" title="Remove">Remove</button>
+        </div>
+      </li>
+    </template>
+
+    <script src="launcher.js"></script>
+  </body>
+</html>

@@ -2,7 +2,8 @@
 #
 # - Every push to main and every pull request: build, downloadable under Actions → run → Artifacts
 # - Pushing a version tag (e.g. `git tag v1.0.0 && git push --tags`): build and publish a
-#   GitHub Release with the apps attached
+#   GitHub Release with the Windows and Linux apps attached. The signed and notarized macOS
+#   app is built locally and added with `gh release upload` (see README)
 # - Can also be started by hand: Actions → Build → Run workflow
 
 name: Build
@@ -64,6 +65,11 @@ jobs:
         with:
           path: dist
           merge-multiple: true
+
+      # The macOS build from GitHub is not signed. The signed and notarized macOS app is
+      # built locally with `npm run build:mac:notarized` and uploaded to the release by hand
+      # (see README → Signing and Notarizing).
+      - run: rm -f dist/*.dmg dist/*.zip
 
       - uses: softprops/action-gh-release@v2
         with:

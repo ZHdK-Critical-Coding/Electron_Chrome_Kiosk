@@ -1,0 +1,18 @@
+# Checks every week for new versions and opens a pull request for each update.
+# A new Electron version brings a new Chromium version. The Build workflow builds every
+# pull request, so you can download and test the apps before merging.
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      electron:
+        patterns: ['electron', 'electron-builder']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

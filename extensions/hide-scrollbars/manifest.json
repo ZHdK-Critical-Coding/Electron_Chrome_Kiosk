@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Hide Scrollbars",
   "version": "1.0",
-  "description": "Example extension: hides the scrollbars on every page. Remove the _ from the folder name to enable it.",
+  "description": "Example extension: hides the scrollbars on every page.",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

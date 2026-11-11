@@ -12,7 +12,8 @@
     "build:mac": "electron-builder --mac --universal",
     "build:win": "electron-builder --win --x64",
     "build:linux": "electron-builder --linux --x64",
-    "build:all": "electron-builder --mac --universal --win --x64 --linux --x64"
+    "build:all": "electron-builder --mac --universal --win --x64 --linux --x64",
+    "build:mac:notarized": "sh scripts/build-mac-notarized.sh"
   },
   "author": "ZHdK Critical Coding",
   "build": {
@@ -26,6 +27,7 @@
       "main.js",
       "config.js",
       "package.json",
+      "launcher/**/*",
       "extensions/**/*"
     ],
     "npmRebuild": false,
@@ -35,7 +37,14 @@
         "zip"
       ],
       "category": "public.app-category.utilities",
-      "identity": null
+      "hardenedRuntime": true,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "extendInfo": {
+        "NSCameraUsageDescription": "Websites shown in the kiosk can use the camera.",
+        "NSMicrophoneUsageDescription": "Websites shown in the kiosk can use the microphone.",
+        "NSLocationUsageDescription": "Websites shown in the kiosk can use your location."
+      }
     },
     "win": {
       "target": [
@@ -62,7 +71,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^44.4.1",
-    "electron-builder": "^26.15.3"
+    "electron": "^45.3.0",
+    "electron-builder": "^26.18.0"
   }
 }
