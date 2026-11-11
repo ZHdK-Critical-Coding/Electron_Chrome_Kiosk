@@ -1,0 +1,68 @@
+{
+  "name": "electron-chrome-kiosk",
+  "version": "1.0.0",
+  "description": "Opens a website fullscreen in kiosk mode with all shortcuts disabled",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "pack": "electron-builder --dir",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac --universal",
+    "build:win": "electron-builder --win --x64",
+    "build:linux": "electron-builder --linux --x64",
+    "build:all": "electron-builder --mac --universal --win --x64 --linux --x64"
+  },
+  "author": "ZHdK Critical Coding",
+  "build": {
+    "appId": "ch.zhdk.criticalcoding.electronchromekiosk",
+    "productName": "Electron Chrome Kiosk",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "config.js",
+      "package.json",
+      "extensions/**/*"
+    ],
+    "npmRebuild": false,
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities",
+      "identity": null
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility"
+    },
+    "publish": null,
+    "asarUnpack": [
+      "extensions/**/*"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^44.4.1",
+    "electron-builder": "^26.15.3"
+  }
+}
