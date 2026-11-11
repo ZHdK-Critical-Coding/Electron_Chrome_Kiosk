@@ -77,8 +77,9 @@ startup, one subfolder per extension (the folder that contains
 `manifest.json`). Folders starting with `_` are skipped — that is how you
 switch an extension off.
 
-The included example `extensions/_hide-scrollbars` hides all scrollbars.
-To enable it, rename the folder to `hide-scrollbars` and restart the app.
+The included example `extensions/hide-scrollbars` hides all scrollbars and
+is active. To switch it off, rename the folder to `_hide-scrollbars` and
+restart the app.
 
 **Using an extension you have installed in Chrome:**
 
@@ -199,7 +200,7 @@ Electron_Chrome_Kiosk/
 ├── build/            # (optional) app icon
 ├── dist/             # Built apps end up here
 ├── extensions/       # Unpacked Chrome extensions, one folder each
-│   └── _hide-scrollbars/   # Example, disabled (starts with _)
+│   └── hide-scrollbars/    # Example: hides scrollbars (active)
 ├── config.js         # URL and settings — edit this file
 ├── main.js           # Electron main process (window, kiosk, key blocking)
 └── package.json      # Scripts and build configuration

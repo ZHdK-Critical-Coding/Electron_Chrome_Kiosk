@@ -78,9 +78,9 @@ geladen, ein Unterordner pro Erweiterung (der Ordner, der `manifest.json`
 enthält). Ordner, die mit `_` beginnen, werden übersprungen – so lässt
 sich eine Erweiterung ausschalten.
 
-Das mitgelieferte Beispiel `extensions/_hide-scrollbars` blendet alle
-Scrollbalken aus. Zum Aktivieren den Ordner in `hide-scrollbars` umbenennen
-und die App neu starten.
+Das mitgelieferte Beispiel `extensions/hide-scrollbars` blendet alle
+Scrollbalken aus und ist aktiv. Zum Ausschalten den Ordner in
+`_hide-scrollbars` umbenennen und die App neu starten.
 
 **Eine in Chrome installierte Erweiterung verwenden:**
 
@@ -211,7 +211,7 @@ Electron_Chrome_Kiosk/
 ├── build/            # (optional) App-Icon
 ├── dist/             # Hier landen die gebauten Apps
 ├── extensions/       # Entpackte Chrome-Erweiterungen, je ein Ordner
-│   └── _hide-scrollbars/   # Beispiel, ausgeschaltet (beginnt mit _)
+│   └── hide-scrollbars/    # Beispiel: blendet Scrollbalken aus (aktiv)
 ├── config.js         # URL und Einstellungen – diese Datei bearbeiten
 ├── main.js           # Electron-Hauptprozess (Fenster, Kiosk, Tastensperre)
 └── package.json      # Skripte und Build-Konfiguration

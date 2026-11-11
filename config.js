@@ -34,7 +34,7 @@ module.exports = {
   clearDataOnStart: false,
 
   // Load the unpacked Chrome extensions in the extensions/ folder (one subfolder per extension).
-  // Folders starting with _ are skipped, e.g. extensions/_hide-scrollbars.
+  // Folders starting with _ are skipped, e.g. rename extensions/hide-scrollbars to _hide-scrollbars to switch it off.
   loadExtensions: true,
 
   // Start the built app automatically when the user logs in (macOS and Windows, built app only).
