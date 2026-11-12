@@ -166,13 +166,17 @@ ihre Fehler.
   Fenster, Entwicklertools, Beenden oder Schliessen. Normales Tippen
   (Buchstaben, Zahlen, `Shift`, `Enter`, Pfeiltasten, `Escape`) kommt
   weiterhin bei der Seite an – Formulare und tastaturgesteuerte Seiten
-  funktionieren.
+  funktionieren. Ausnahme: `@`, das auf Schweizer und deutschen
+  Tastaturen `Option`/`AltGr` braucht, lässt sich tippen (E-Mail-Adressen).
 - **Fenster:** Kiosk-Vollbild, immer im Vordergrund, kann nicht geschlossen
   werden (`Alt`+`F4` wird ignoriert). Unter macOS sind Dock, Menüleiste,
   `Cmd`+`Tab` und Sofort beenden (`Cmd`+`Alt`+`Esc`) deaktiviert.
 - **Browser:** keine Adressleiste, kein Menü, kein Kontextmenü, kein
-  Pinch-Zoom. Links, die ein neues Fenster öffnen würden, öffnen sich im
-  Kiosk-Fenster.
+  Pinch-Zoom. Links und Skripte, die ein neues Fenster oder einen neuen
+  Tab öffnen (`target="_blank"`, `window.open`, z. B. «Mit Microsoft
+  anmelden»), öffnen sich als Popup-Fenster über dem Kiosk, damit Logins
+  funktionieren. Popups werden beim Zurücksetzen nach Inaktivität
+  geschlossen.
 - **Robustheit:** Die Seite wird neu geladen, wenn sie nicht geladen werden
   kann (z. B. noch kein Netzwerk nach dem Hochfahren) oder abstürzt. Es
   läuft immer nur eine Instanz. Der Bildschirm geht nicht in den Ruhezustand.
@@ -365,7 +369,8 @@ Electron_Chrome_Kiosk/
 - **`main.js` → `handleKioskKeys()`**: läuft im Kiosk bei jedem
   Tastendruck, bevor die Seite ihn sieht. Führt bei `exitShortcut` zurück
   zum Startfenster, verwirft sonst alle Kombinationen mit
-  `Cmd`/`Ctrl`/`Alt` und die Funktionstasten (`event.preventDefault()`).
+  `Cmd`/`Ctrl`/`Alt` (ausser `@`) und die Funktionstasten
+  (`event.preventDefault()`).
 - **`main.js` → `launchKiosk()` / `exitKiosk()`**: öffnen das
   Kiosk-Fenster (entfernt das App-Menü und damit alle Menü-Tastenkürzel,
   lädt Erweiterungen, setzt die Handler für Navigation, Ladefehler,

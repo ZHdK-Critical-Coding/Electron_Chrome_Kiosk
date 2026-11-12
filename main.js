@@ -270,6 +270,9 @@ function handleKioskKeys(event, input) {
 
   // Block every key combination with Cmd/Ctrl/Alt, all function keys (F1–F24: reload,
   // dev tools, fullscreen …) and special browser keys. Normal typing still reaches the page.
+  // Exception: @ (e-mail addresses). On many layouts it needs Alt/Option or AltGr, which Windows
+  // reports as Ctrl+Alt (Swiss: Option+G / AltGr+2, German: Option+L / AltGr+Q).
+  if (input.key === '@' && !input.meta) return;
   if (input.control || input.meta || input.alt || /^F\d+$/.test(input.code) || input.code.startsWith('Browser')) {
     event.preventDefault();
   }
@@ -314,23 +317,44 @@ async function launchKiosk() {
 
   const wc = kiosk.webContents;
   // Load errors are handled by 'did-fail-load' below, so the promise's rejection is ignored
-  const load = () => kiosk && !kiosk.isDestroyed() && wc.loadURL(startUrl).catch(() => {});
+  const load = () => {
+    if (!kiosk || kiosk.isDestroyed()) return;
+    for (const popup of kiosk.getChildWindows()) popup.destroy(); // e.g. an abandoned login popup
+    wc.loadURL(startUrl).catch(() => {});
+  };
 
-  wc.on('before-input-event', handleKioskKeys);
   wc.setVisualZoomLevelLimits(1, 1); // no pinch-to-zoom
   wc.on('did-finish-load', () => wc.setZoomFactor(settings.zoomFactor));
   wc.on('dom-ready', () => {
     if (settings.hideCursor) wc.insertCSS('*, *::before, *::after { cursor: none !important; }');
   });
 
-  // Links that would open a new window (target="_blank", window.open) open in the kiosk window
-  wc.setWindowOpenHandler(({ url }) => {
-    if (isAllowed(url)) wc.loadURL(url).catch(() => {});
-    return { action: 'deny' };
-  });
-  wc.on('will-navigate', (event, url) => {
-    if (!isAllowed(url)) event.preventDefault();
-  });
+  // New windows and tabs (window.open, target="_blank") open as popups on top of the kiosk.
+  // Logins like "Sign in with Microsoft/Google" need this: the page waits for the popup to
+  // report back (window.opener) and close itself, which fails if it replaces the page.
+  const openAsPopup = ({ url }) => {
+    if (!isAllowed(url)) return { action: 'deny' };
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: {
+        parent: kiosk,
+        alwaysOnTop: !isDev,
+        fullscreenable: false,
+        minimizable: false,
+        autoHideMenuBar: true,
+        webPreferences: { devTools: isDev },
+      },
+    };
+  };
+  const guard = (contents) => {
+    contents.on('before-input-event', handleKioskKeys);
+    contents.setWindowOpenHandler(openAsPopup);
+    contents.on('will-navigate', (event, url) => {
+      if (!isAllowed(url)) event.preventDefault();
+    });
+    contents.on('did-create-window', (popup) => guard(popup.webContents));
+  };
+  guard(wc);
 
   // No network yet, server down …: try again later
   wc.on('did-fail-load', (event, errorCode, errorDescription, url, isMainFrame) => {

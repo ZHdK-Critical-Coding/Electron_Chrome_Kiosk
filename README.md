@@ -154,11 +154,16 @@ show its errors.
   reload, back, zoom, print, save, new window, dev tools, quit or close.
   Normal typing (letters, numbers, `Shift`, `Enter`, arrows, `Escape`)
   still reaches the page, so forms and keyboard-controlled pages work.
+  Exception: `@`, which needs `Option`/`AltGr` on Swiss and German
+  keyboards, can be typed (e-mail addresses).
 - **Window:** kiosk fullscreen, always on top, cannot be closed
   (`Alt`+`F4` is ignored). On macOS, the Dock, the menu bar, `Cmd`+`Tab`
   and force quit (`Cmd`+`Alt`+`Esc`) are disabled.
 - **Browser:** no address bar, no menu, no context menu, no pinch zoom.
-  Links that open a new window open in the kiosk window.
+  Links and scripts that open a new window or tab (`target="_blank"`,
+  `window.open`, e.g. "Sign in with Microsoft") open as a popup window on
+  top of the kiosk, so login flows work. Popups are closed when the kiosk
+  resets after idle time.
 - **Robustness:** the page is reloaded if it cannot be loaded (no network
   yet after booting) or crashes. Only one instance can run. The display is
   kept from going to sleep.
@@ -339,8 +344,8 @@ Electron_Chrome_Kiosk/
   it, `loadKioskExtensions()` loads the enabled ones before the kiosk opens.
 - **`main.js` → `handleKioskKeys()`**: runs for every key press in the kiosk
   before the page sees it. Returns to the launcher on `exitShortcut`,
-  otherwise drops all combinations with `Cmd`/`Ctrl`/`Alt` and the
-  function keys (`event.preventDefault()`).
+  otherwise drops all combinations with `Cmd`/`Ctrl`/`Alt` (except `@`)
+  and the function keys (`event.preventDefault()`).
 - **`main.js` → `launchKiosk()` / `exitKiosk()`**: open the kiosk window
   (removes the app menu and with it all menu shortcuts, loads extensions,
   installs the handlers for navigation, load errors, crashes and closing,
